@@ -1,0 +1,24 @@
+<div class="m-4">
+  <h1><%= @list.name %></h1>
+  <%= link_to 'Update list', edit_list_path(@list), class: 'btn border' %>
+  <%= link_to 'Add a movie', new_list_bookmark_path(@list, @bookmark), class: 'btn border' %>
+</div>
+
+<div class="grid-container">
+  <% @list.movies.each do |movie| %>
+  <% bookmark = Bookmark.find_by(list: @list, movie: movie) %>
+    <div class="card">
+      <h2><%= movie.title %></h2>
+      <%= image_tag movie.poster_url, alt: movie.title %>
+      <p><%= movie.rating %></p>
+      <p><%= movie.overview %></p>
+      <%= link_to 'Delete', bookmark_path(bookmark),
+      data: { turbo_method: :delete, turbo_confirm: "Are you sure?" },
+      class: 'btn btn-secondary' %>
+    </div>
+  <% end %>
+</div>
+
+<div class="m-4">
+  <%= link_to 'Return to all lists', lists_path, class: 'btn btn-secondary' %>
+</div>
