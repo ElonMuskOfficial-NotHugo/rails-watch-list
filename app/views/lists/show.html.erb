@@ -1,6 +1,13 @@
+<div>
+  <% if @list.photo.present? %>
+    <h1 style="background-image: url('<%= cloudinary_url(@list.photo.key, crop: :fill) %>'); background-size: cover; background-repeat: no-repeat; background-position: center; color: white; padding: 40px 20px; box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); border-radius: 5px;"><%= @list.name %></h1>
+  <% else %>
+    <h1 style="color: black; padding: 40px 20px; box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); border-radius: 5px;"><%= @list.name %></h1>
+  <% end %>
+</div>
+
 <div class="m-4">
-  <h1><%= @list.name %></h1>
-  <%= link_to 'Update list', edit_list_path(@list), class: 'btn border' %>
+  <%= link_to 'Update list', edit_list_path(@list), class: 'btn border mx-4' %>
   <%= link_to 'Add a movie', new_list_bookmark_path(@list, @bookmark), class: 'btn border' %>
 </div>
 
@@ -12,6 +19,7 @@
       <%= image_tag movie.poster_url, alt: movie.title %>
       <p><%= movie.rating %></p>
       <p><%= movie.overview %></p>
+      <p class="fst-italic"><%= bookmark.comment %></p>
       <%= link_to 'Delete', bookmark_path(bookmark),
       data: { turbo_method: :delete, turbo_confirm: "Are you sure?" },
       class: 'btn btn-secondary' %>
@@ -19,6 +27,27 @@
   <% end %>
 </div>
 
+<h4 class="m-4">Reviews</h4>
+<ul class="list-group m-4">
+  <% @list.reviews.each do |review| %>
+    <li class="list-group-item d-flex justify-content-between align-items-center"><%= review.content %> <%= link_to "Delete", review_path(review), data: { turbo_method: :delete, turbo_confirm: "Are you sure?" }, class: 'btn btn-secondary ' %></li>
+  <% end %>
+</ul>
+
+<br>
+
 <div class="m-4">
-  <%= link_to 'Return to all lists', lists_path, class: 'btn btn-secondary' %>
+  <h2>Add a Review</h2>
+  <%= simple_form_for [@list, @review] do |form| %>
+    <%= form.input :content %>
+    <%= form.submit 'Submit', class: 'btn border' %>
+  <% end %>
+</div>
+
+<br>
+
+  <div class="m-4">
+    <%= link_to 'Return to all lists', lists_path, class: 'btn btn-secondary' %>
+  </div>
+
 </div>
